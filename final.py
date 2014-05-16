@@ -4,6 +4,7 @@ from wtforms import *
 from flask_bootstrap import Bootstrap
 import os
 import urllib
+import datetime
 
 app = Flask(__name__)
 app.debug = True   # need this for autoreload as well as stack trace
@@ -36,6 +37,7 @@ class User(db.Model):
     address = db.Column(db.Text)
     phoneNum = db.Column(db.Text)
     skills = db.relationship('Skill', secondary = UserSkill)
+    projects = db.relationship('Project', secondary= UserProject)
 
 class Skill(db.Model):
     __tablename__ = 'skill'
@@ -48,6 +50,8 @@ class Project(db.Model):
     projectName = db.Column(db.Text)
     projectDesc = db.Column(db.Text)
     projectDue = db.Column(db.Text)
+    projectStart = db.Column(db.Text)
+    projectEnd = db.Column(db.Text)
     contributers = db.relationship('User', secondary = UserProject)
 
 db.drop_all()
@@ -194,16 +198,17 @@ def userprofile(userid):
     user = []
     usInfo = User.query.filter_by(userId = userid).first()
     if usInfo != None:
-        if user.append(usInfo.firstName) != None:
-            user.append(usInfo.firstName).title()
+        user.append(usInfo.userId)
+        if usInfo.firstName != None:
+            user.append(usInfo.firstName.title())
         else:
             user.append("")
-        if user.append(usInfo.lastName) != None:
-            user.append(usInfo.lastName).title()
+        if usInfo.lastName != None:
+            user.append(usInfo.lastName.title())
         else:
             user.append("")
-        if user.append(usInfo.nickname) != None:
-            user.append(usInfo.nickname).title()
+        if usInfo.nickname != None:
+            user.append(usInfo.nickname.title())
         else:
             user.append("")
         user.append(usInfo.email)
@@ -212,8 +217,20 @@ def userprofile(userid):
         skills = usInfo.skills
         sks = []
         for s in skills:
-            sks.append(s.skillName)
+            sks.append(s.skillName.title())
         user.append(sks)
+        projects = usInfo.projects
+        pjs = []
+        for p in projects:
+            pInfo = []
+            pInfo.append(p.projectId)
+            pInfo.append(p.projectName.title())
+            pjs.append(pInfo)
+        user.append(pjs)
+        print user
+        #user list: 0-userid, 1-firstname, 2-lastname, 3-nickname, 4-email, 5-address, 6-phoneNum, 7-skills, 8-projects
+        #skill list: 0-skillName
+        #project list: 0-projectId, 1-project name
     else:
         user = []
     return render_template('profile.html', user=user)

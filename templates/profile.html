@@ -1,0 +1,37 @@
+{% extends "main.html" %}
+
+{% block stuff %}
+<div class="container theme-showcase" role="main">
+  <div class="page-header">
+    <h1><br/>{{user[1]}} {{user[2]}}</h1>
+  </div>
+<div class="panel panel-info col-md-12">
+  <div class="panel-heading">
+    <h3 class="panel-title">Profile Information</h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+      <li>User ID: {{user[0]}}</li>
+      <li>Nickname: {{user[3]}}</li>
+      <li>Skills: 
+      {% for skill in user[7] %} 
+        {{skill}} |  
+      {% endfor %}
+      </li>
+      <li>Projects Currently Contributing to: 
+      {% for project in user[8] %} 
+        <a href="/projects/{{project[0]}}"> {{project[1]}}</a> |  
+      {% endfor %} 
+      </li>
+    </ul>
+
+    <h4>Contact {{user[1]}} {{user[2]}}: </h3>
+    <ul>
+      <li>Email: <a href= "mailto: {{user[4]}}"> {{user[4]}}</a></li>
+      <li>Address: {{user[5]}}</li>
+      <li>Phone: {{user[6]}}</li>
+    </ul>
+<!-- 0=userid, 1=firstname 2=lastname, 3=nickname, 4=email, 5=address, 6=phone <ahref = tomail-->
+   
+</div>
+{% endblock %}
