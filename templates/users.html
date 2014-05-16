@@ -38,14 +38,14 @@
               <td>{{res[2]}}</td>
               <td>{{res[3]}}</td>
               <td><a href="mailto:{{res[4]}}">{{res[4]}}</a></td>
-              <td><a href="users/{{res[0]}}">x</a></td>
+              <td><a href="users/{{res[0]}}"><img src="static/arrow2.png" height="20px" width="20px"></a></td>
             </tr>
           {% endfor %}
           </tbody>
         </table>
       </div>  
     </div>
-      <a class="col-md-12" href="/skills"><button type="button" class="btn btn-xs btn-primary">Search again?</button></a>
+      <a class="col-md-12" href="/users"><button type="button" class="btn btn-xs btn-primary">Search again?</button></a>
     {% endif %}
 </div>
 {% endblock %}
