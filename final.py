@@ -30,7 +30,7 @@ class User(db.Model):
     nickname = db.Column(db.Text)
     email = db.Column(db.Text)
     address = db.Column(db.Text)
-    phoneNum = db.Column(db.Integer) #should this be text? Make sure to decide how their number will be entered into the database
+    phoneNum = db.Column(db.Text)
     skills = db.relationship('Skill', secondary = UserSkill)
 
 class Skill(db.Model):
@@ -42,22 +42,26 @@ class Skill(db.Model):
 db.drop_all()
 db.create_all()
 
-u1 = User(userId='krogis01',firstName='isabelle',lastName='krogh',nickname = "elle", email='krogis01@luther.edu',address='Farwell237',phoneNum=5154017985)
-u2 = User(userId='junghe02',firstName='henry',lastName='jungbauer',nickname = "hank",email='junghe02@luther.edu',address='Dieseth523',phoneNum=6519257403)
-u3 = User(userId='dykega01',firstName='gage',lastName='dykema',nickname = "gagey",email='dykega01@luther.edu',address='LarsenAPT',phoneNum=6512497599)
-u4 = User(userId='gagehe01',firstName='henry',lastName='gage',email='gagehe01@luther.edu',address='LarsenAPT',phoneNum=6512497599)
+u1 = User(userId='krogis01',firstName='isabelle',lastName='krogh',nickname = "elle", email='krogis01@luther.edu',address='Farwell 237',phoneNum='515-401-7985')
+u2 = User(userId='junghe02',firstName='henry',lastName='jungbauer',nickname = "hank",email='junghe02@luther.edu',address='Dieseth 523',phoneNum='651-925-7403')
+u3 = User(userId='dykega01',firstName='gage',lastName='dykema',nickname = "gagey",email='dykega01@luther.edu',address='Larsen APT',phoneNum='651-249-7599')
+u4 = User(userId='gagehe01',firstName='henry',lastName='gage',email='gagehe01@luther.edu',address='LarsenAPT',phoneNum='651-249-7599')
+u5 = User(userId='bmiller', firstName='brad',lastName='miller',email='bmiller@luther.edu',address='Olin 321',phoneNum='563-387-1137')
+u6 = User(userId='bottth01',firstName='thomas',lastName='bottem',nickname = "tom",email='bottth01@luther.edu',address='Larsen APT',phoneNum='555-679-7891')
 
-db.session.add_all([u1,u2,u3,u4])
+db.session.add_all([u1,u2,u3,u4,u5,u6])
 
-s1 = Skill(skillName='html',users=[u1,u2,u3,u4])
-s2 = Skill(skillName='python',users=[u1,u2,u3])
+s1 = Skill(skillName='html',users=[u1,u2,u3,u4,u5,u6])
+s2 = Skill(skillName='python',users=[u1,u2,u3,u5])
 s3 = Skill(skillName='german',users=[u2,u4])
-s4 = Skill(skillName='swedish',users=[u3])
+s4 = Skill(skillName='swedish',users=[u3,u6])
 s5 = Skill(skillName='chinese',users=[u1,u4])
-s6 = Skill(skillName='css',users=[u3])
-s7 = Skill(skillName='internet programming',users=[u2,u3])
+s6 = Skill(skillName='css',users=[u3,u5])
+s7 = Skill(skillName='internet programming',users=[u2,u3,u5])
+s8 = Skill(skillName='business',users=[u6])
+s9 = Skill(skillName='teaching',users=[u6,u5])
 
-db.session.add_all([s1,s2,s3,s4,s5,s6,s7])
+db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9])
 db.session.commit()
 
 class SkillForm(Form):
@@ -83,8 +87,8 @@ def skillsearch():
             useList = useList.users
         else:
             useList = []
-        if len(useList) > 5: # limit results to 5 entries
-            useList = useList[0:5]
+        if len(useList) > 8: # limit results to 8 entries
+            useList = useList[0:8]
         for resUser in useList: #convert querry to list
             x = []
             x.append(resUser.userId)
@@ -143,8 +147,8 @@ def usersearch():
             if x not in unique:
                 unique.add(x)
                 useList.append(x)
-        if len(useList) > 5: # limit results to 5 entries
-            useList = useList[0:5]
+        if len(useList) > 8: # limit results to 8 entries
+            useList = useList[0:8]
         for resUser in useList: #convert querry to list
             x = []
             x.append(resUser.userId)
