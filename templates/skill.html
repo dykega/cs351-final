@@ -1,0 +1,52 @@
+{% extends "main.html" %}
+
+{% block stuff %}
+<div class="container theme-showcase" role="main">
+  <div class="page-header">
+    <h1><br />Skill Search</h1>
+  </div>
+  {% if results == [] or not results %}
+    {% if qr %}
+     <div class="page-header">
+      <h3>Alert!</h3>
+      <div class="alert alert-info">
+        <strong>Oh snap!</strong> Can't find yo tutor! Best check yo self and try searching again.
+        </div>
+      </div>
+    {% endif %}
+      <form method="GET" action="/skills">
+        <div>{{ form.skill.label }}: {{ form.skill }}</div>
+        <input type="submit" value="Submit">
+      </form>
+    {% else %}
+      <div class="col-md-8">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>User Id</th>
+              <th>Skills</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for res in results %}
+            <tr>
+              <td><a href="users/{{res[0]}}">{{res[0]}}</a></td>
+              <td><a href="/skills?skill={{res[8][0]}}">{{res[7][0]}}</a></td>
+              <td><a href="/skills?skill={{res[8][1]}}">{{res[7][1]}}</a></td>
+              <td><a href="/skills?skill={{res[8][2]}}">{{res[7][2]}}</a></td>
+              <td><a href="/skills?skill={{res[8][3]}}">{{res[7][3]}}</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>  
+    </div> 
+      <a class="col-md-12" href="/skills"><button type="button" class="btn btn-xs btn-primary">Search again?</button></a>    
+    {% endif %}
+</div>
+{% endblock %}

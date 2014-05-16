@@ -1,0 +1,74 @@
+{% extends "bootstrap/base.html" %}
+{% block title %} SkillsConnect {% endblock %}
+{% block head %}
+{{ super() }}
+  <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/4QAAFxWUAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMzMxEREREREyIhERAAABETIBERECEQERMhEREQIRERExERERAhERERERERECERERERMzMwIRERERExEjAhERERERESMCEQERERERIwAAAREREzMzERERERETIRERERETERMhERERESMREyETEREQIxETMzMRESIjERERERETMzMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+{% endblock %}
+{% block styles %}
+{{ super() }}
+  <link href="theme.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+<!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">SkillsConnect</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/users">UserSearch</a></li>
+            <li><a href="/skills">SkillSearch</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+   {% block stuff %}
+    <div class="container theme-showcase" role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>This is what this does...</h1>
+        <p>Ever needed help with a project? Welcome to SkillsConnect! Here you can search for someone to help you complete a project by searching through the navigation bar above. Search by User or Skill and contact the tutor of your dreams! Happy Searching!</p>
+      </div>
+
+
+<!--
+      <div class="page-header">
+        <h1>Buttons</h1>
+      </div>
+      <p>
+        <button type="button" class="btn btn-lg btn-info">Info</button>
+      </p>
+
+
+      <div class="page-header">
+        <h1>SkillsConnect</h1>
+      </div>
+      <img data-src="holder.js/200x200" class="img-thumbnail" alt="A generic square placeholder image with a white border around it, making it resemble a photograph taken with an old instant camera">
+
+
+      <div class="page-header">
+        <h1>Alert!</h1>
+      <div class="alert alert-info">
+        <strong>Oh snap!</strong> Can't find yo tutor! Best check yo self and try searching again.
+      </div>
+      </div>
+-->
+    </div> 
+    {% endblock %}
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/docs.min.js"></script> {% endblock %}

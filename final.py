@@ -1,0 +1,201 @@
+from flask import Flask, render_template, request, session
+from flask.ext.sqlalchemy import SQLAlchemy
+from wtforms import *
+from flask_bootstrap import Bootstrap
+import os
+import urllib
+
+app = Flask(__name__)
+app.debug = True   # need this for autoreload as well as stack trace
+app.secret_key = 'chelseafc'
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
+Bootstrap(app)
+
+db = SQLAlchemy(app)
+
+UserSkill = db.Table('userskills',
+    db.Column('user_Id', db.Text, db.ForeignKey('user.userId')),
+    db.Column('skill_Name', db.Text, db.ForeignKey('skill.skillName'))
+    #anything else that needs to be in the entity between skill and user?
+)
+
+class User(db.Model):
+    __tablename__='user'
+    userId = db.Column(db.Text, primary_key=True)
+    firstName = db.Column(db.Text)
+    lastName = db.Column(db.Text)
+    nickname = db.Column(db.Text)
+    email = db.Column(db.Text)
+    address = db.Column(db.Text)
+    phoneNum = db.Column(db.Integer) #should this be text? Make sure to decide how their number will be entered into the database
+    skills = db.relationship('Skill', secondary = UserSkill)
+
+class Skill(db.Model):
+    __tablename__ = 'skill'
+    skillName = db.Column(db.Text, primary_key=True)
+    skillConfidence = db.Column(db.Integer)
+    users = db.relationship('User', secondary = UserSkill)
+
+db.drop_all()
+db.create_all()
+
+u1 = User(userId='krogis01',firstName='isabelle',lastName='krogh',nickname = "elle", email='krogis01@luther.edu',address='Farwell237',phoneNum=5154017985)
+u2 = User(userId='junghe02',firstName='henry',lastName='jungbauer',nickname = "hank",email='junghe02@luther.edu',address='Dieseth523',phoneNum=6519257403)
+u3 = User(userId='dykega01',firstName='gage',lastName='dykema',nickname = "gagey",email='dykega01@luther.edu',address='LarsenAPT',phoneNum=6512497599)
+u4 = User(userId='gagehe01',firstName='henry',lastName='gage',email='gagehe01@luther.edu',address='LarsenAPT',phoneNum=6512497599)
+
+db.session.add_all([u1,u2,u3,u4])
+
+s1 = Skill(skillName='html',users=[u1,u2,u3,u4])
+s2 = Skill(skillName='python',users=[u1,u2,u3])
+s3 = Skill(skillName='german',users=[u2,u4])
+s4 = Skill(skillName='swedish',users=[u3])
+s5 = Skill(skillName='chinese',users=[u1,u4])
+s6 = Skill(skillName='css',users=[u3])
+s7 = Skill(skillName='internet programming',users=[u2,u3])
+
+db.session.add_all([s1,s2,s3,s4,s5,s6,s7])
+db.session.commit()
+
+class SkillForm(Form):
+    skill = TextField('Skill')
+
+class UserForm(Form):
+    name = TextField('Name of User')
+    
+
+@app.route('/') 
+def home():
+    return render_template('main.html')
+
+@app.route('/skills')
+def skillsearch():
+    form = SkillForm()
+    if request.args.get("skill") != None:
+        qr = True
+        results = []
+        inskill = request.args.get('skill').lower()
+        useList = Skill.query.filter_by(skillName = inskill).first()
+        if useList != None:
+            useList = useList.users
+        else:
+            useList = []
+        if len(useList) > 5: # limit results to 5 entries
+            useList = useList[0:5]
+        for resUser in useList: #convert querry to list
+            x = []
+            x.append(resUser.userId)
+            if resUser.firstName != None:
+                x.append(resUser.firstName.title())
+            else:
+                x.append("")
+            if resUser.lastName != None:
+                x.append(resUser.lastName.title())
+            else:
+                x.append("")            
+            if resUser.nickname != None:
+                x.append(resUser.nickname.title())
+            else:
+                x.append("")
+            x.append(resUser.email)
+            x.append(resUser.address)
+            x.append(resUser.phoneNum)
+            sks = []
+            urlSks = []
+            for i in range (4):
+                try:
+                    s = resUser.skills[i].skillName.title()
+                except:
+                    s = ""
+                try:
+                    urlS = urllib.quote_plus(resUser.skills[i].skillName)
+                except:
+                    urlS = s.lower()
+                sks.append(s)
+                urlSks.append(urlS)
+            x.append(sks)
+            x.append(urlSks)
+            results.append(x)
+        return render_template('skill.html', results = results, form = form, qr = qr)
+    else:
+        return render_template('skill.html', form = form)
+
+@app.route('/users')
+def usersearch():
+    form = UserForm()
+    if request.args.get("name") != None:
+        qr = True
+        results = []
+        namesStr = request.args.get('name').lower()
+        names = namesStr.split()
+        resList = []
+        useList = []
+        for inname in names:
+            resList1 = User.query.filter_by(firstName = inname).all()
+            resList2 = User.query.filter_by(lastName = inname).all()
+            resList3 = User.query.filter_by(nickname = inname).all()
+            resList = resList + resList1 + resList2 + resList3
+        unique = set()
+        for x in resList:
+            if x not in unique:
+                unique.add(x)
+                useList.append(x)
+        if len(useList) > 5: # limit results to 5 entries
+            useList = useList[0:5]
+        for resUser in useList: #convert querry to list
+            x = []
+            x.append(resUser.userId)
+            if resUser.firstName != None:
+                x.append(resUser.firstName.title())
+            else:
+                x.append("")                
+            if resUser.lastName != None:
+                x.append(resUser.lastName.title())
+            else:
+                x.append("")
+            if resUser.nickname != None:
+                x.append(resUser.nickname.title())
+            else:
+                x.append("")
+            x.append(resUser.email)
+            x.append(resUser.address)
+            x.append(resUser.phoneNum)
+            results.append(x)
+        return render_template('users.html', results = results, form = form, qr = qr)
+    else:
+        return render_template('users.html', form = form)
+
+@app.route('/users/<userid>')
+def userprofile(userid):
+    user = []
+    usInfo = User.query.filter_by(userId = userid).first()
+    if usInfo != None:
+        if user.append(usInfo.firstName) != None:
+            user.append(usInfo.firstName).title()
+        else:
+            user.append("")
+        if user.append(usInfo.lastName) != None:
+            user.append(usInfo.lastName).title()
+        else:
+            user.append("")
+        if user.append(usInfo.nickname) != None:
+            user.append(usInfo.nickname).title()
+        else:
+            user.append("")
+        user.append(usInfo.email)
+        user.append(usInfo.address)
+        user.append(usInfo.phoneNum)
+        skills = usInfo.skills
+        sks = []
+        for s in skills:
+            sks.append(s.skillName)
+        user.append(sks)
+    else:
+        user = []
+    return render_template('profile.html', user=user)
+
+    
+

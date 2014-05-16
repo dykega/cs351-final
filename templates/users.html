@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+
+{% block stuff %}
+<div class="container theme-showcase" role="main">
+  <div class="page-header">
+    <h1><br />User Search</h1>
+  </div>
+  {% if results == [] or not results %}
+    {% if qr %}
+     <div class="page-header">
+      <h3>Alert!</h3>
+      <div class="alert alert-info">
+        <strong>Oh snap!</strong> Can't find yo tutor! Best check yo self and try searching again.
+        </div>
+      </div>
+    {% endif %}
+      <form method="GET" action="/users">
+        <div>{{ form.name.label }}: {{ form.name }}</div>
+        <input type="submit" value="Submit">
+      </form>
+    {% else %}
+      <div class="col-md-8">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Nickname</th>
+              <th>E-mail</th>
+              <th>Profile</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for res in results %}
+            <tr>
+              <td>{{res[1]}}</td>
+              <td>{{res[2]}}</td>
+              <td>{{res[3]}}</td>
+              <td><a href="mailto:{{res[4]}}">{{res[4]}}</a></td>
+              <td><a href="users/{{res[0]}}">x</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>  
+    </div>
+      <a class="col-md-12" href="/skills"><button type="button" class="btn btn-xs btn-primary">Search again?</button></a>
+    {% endif %}
+</div>
+{% endblock %}
