@@ -200,6 +200,3 @@ def userprofile(userid):
     else:
         user = []
     return render_template('profile.html', user=user)
-
-    
-
