@@ -125,7 +125,7 @@ def skillsearch():
             x.append(resUser.address)
             x.append(resUser.phoneNum)
             sks = []
-            urlSks = []
+            urlSks =  []
             for i in range (4):
                 try:
                     s = resUser.skills[i].skillName.title()
@@ -244,6 +244,7 @@ def projects():
 def projectProfile(projectid):
     projRaw = Project.query.filter_by(projectId=projectid).first()
     project = []
+    print projRaw
     project.append(projRaw.projectId)
     project.append(projRaw.projectName)
     project.append(projRaw.projectDesc)
