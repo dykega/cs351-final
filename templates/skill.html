@@ -19,6 +19,12 @@
         <input type="submit" value="Submit">
       </form>
     {% else %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Users</h3>
+        </div>
+    </div>
+
       <div class="col-md-8">
       <div class="table-responsive">
         <table class="table table-striped">
@@ -46,6 +52,36 @@
         </table>
       </div>  
     </div> 
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Projects</h3>
+        </div>
+    </div>
+
+      <div class="col-md-8">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Project Description</th>
+              <th>Skills</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for res in projResults %}
+            <tr>
+              <td><a href="projects/{{res[0]}}">{{res[1]}}</a></td>
+              <td>{{res}}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>  
+    </div> 
+
       <a class="col-md-12" href="/skills"><button type="button" class="btn btn-xs btn-primary">Search again?</button></a>    
     {% endif %}
 </div>

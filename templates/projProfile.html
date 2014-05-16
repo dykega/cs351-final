@@ -32,6 +32,7 @@
       {% for c in project[4] %}
       <a href="/users/{{c[0]}}" class="list-group-item">{{c[1].title()}} {{c[2].title()}} <img src="/static/arrow2.png" height="20px" width="20px"></a>
       {% endfor %}
+      <a href="mailto:{% for c in project[4] %}{{c[3]}},{% endfor %}" target = "_blank" class="list-group-item">Email all contributors</a>
     </div>
   </div>
 

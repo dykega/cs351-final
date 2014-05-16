@@ -27,6 +27,11 @@ UserProject = db.Table('userprojects',
     db.Column('project_Id', db.Text, db.ForeignKey('project.projectId'))
 )
 
+SkillProject = db.Table('userprojects',
+    db.Column('skillName', db.Text, db.ForeignKey('skill.skillName')),
+    db.Column('project_Id', db.Text, db.ForeignKey('project.projectId'))
+)
+
 class User(db.Model):
     __tablename__='user'
     userId = db.Column(db.Text, primary_key=True)
@@ -43,6 +48,7 @@ class Skill(db.Model):
     __tablename__ = 'skill'
     skillName = db.Column(db.Text, primary_key=True)
     users = db.relationship('User', secondary = UserSkill)
+    projects = db.relationship('Project', secondary=SkillProject)
 
 class Project(db.Model):
     __tablename__ = 'project'
@@ -53,6 +59,7 @@ class Project(db.Model):
     projectStart = db.Column(db.Text)
     projectEnd = db.Column(db.Text)
     contributers = db.relationship('User', secondary = UserProject)
+    skills = db.relationship('Skill', secondary= SkillProject)
 
 db.drop_all()
 db.create_all()
@@ -78,7 +85,7 @@ s9 = Skill(skillName='teaching',users=[u6,u5])
 
 db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9])
 
-p1 = Project(projectId="IntProgFinal-01", projectName="Internet Programming Final", projectDesc="A final project for Internet Programming class for spring semester 2014",projectDue="5-21-2014",contributers=[u1,u2,u3])
+p1 = Project(projectId="IntProgFinal-01", projectName="Internet Programming Final", projectDesc="A final project for Internet Programming class for spring semester 2014",projectDue="5-21-2014",contributers=[u1,u2,u3],skills=[s1,s2,s6,s7])
 p2 = Project(projectId="IntProg-01", projectName="Internet Programming Class", projectDesc="Attend Internet Programming Class",projectDue="5-18-2014",contributers=[u1,u2,u3,u5])
 p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",contributers=[u4,u5])
 
@@ -103,10 +110,13 @@ def skillsearch():
         qr = True
         results = []
         inskill = request.args.get('skill').lower()
+
         useList = Skill.query.filter_by(skillName = inskill).first()
         if useList != None:
+            projList = useList.projects
             useList = useList.users
         else:
+            projList = []
             useList = []
         if len(useList) > 8: # limit results to 8 entries
             useList = useList[0:8]
@@ -144,7 +154,22 @@ def skillsearch():
             x.append(sks)
             x.append(urlSks)
             results.append(x)
-        return render_template('skill.html', results = results, form = form, qr = qr)
+
+        projResults = []
+        if len(projList) > 8: # limit results to 8 entries
+            projList = projList[0:8]
+        for resProj in projList:
+            x = []
+            x.append(resProj.projectId)
+            x.append(resProj.projectName.title())
+            x.append(resProj.projectDesc)
+            sks = []
+            for i in range(2):
+                sks.append(resProj.skills[i].skillName.title())
+            x.append(sks)
+            projResults.append(x)
+
+        return render_template('skill.html', results = results, form = form, qr = qr, projResults=projResults)
     else:
         return render_template('skill.html', form = form)
 
@@ -273,6 +298,7 @@ def projectProfile(projectid):
         cps.append(c.userId)
         cps.append(c.firstName)
         cps.append(c.lastName)
+        cps.append(c.email)
         contr.append(cps)
     project.append(contr)
     return render_template('projProfile.html',project=project)
