@@ -19,7 +19,11 @@ db = SQLAlchemy(app)
 UserSkill = db.Table('userskills',
     db.Column('user_Id', db.Text, db.ForeignKey('user.userId')),
     db.Column('skill_Name', db.Text, db.ForeignKey('skill.skillName'))
-    #anything else that needs to be in the entity between skill and user?
+)
+
+UserProject = db.Table('userprojects',
+    db.Column('user_Id', db.Text, db.ForeignKey('user.userId')),
+    db.Column('project_Id', db.Text, db.ForeignKey('project.projectId'))
 )
 
 class User(db.Model):
@@ -36,8 +40,15 @@ class User(db.Model):
 class Skill(db.Model):
     __tablename__ = 'skill'
     skillName = db.Column(db.Text, primary_key=True)
-    skillConfidence = db.Column(db.Integer)
     users = db.relationship('User', secondary = UserSkill)
+
+class Project(db.Model):
+    __tablename__ = 'project'
+    projectId = db.Column(db.Text, primary_key=True)
+    projectName = db.Column(db.Text)
+    projectDesc = db.Column(db.Text)
+    projectDue = db.Column(db.Text)
+    contributers = db.relationship('User', secondary = UserProject)
 
 db.drop_all()
 db.create_all()
@@ -45,7 +56,7 @@ db.create_all()
 u1 = User(userId='krogis01',firstName='isabelle',lastName='krogh',nickname = "elle", email='krogis01@luther.edu',address='Farwell 237',phoneNum='515-401-7985')
 u2 = User(userId='junghe02',firstName='henry',lastName='jungbauer',nickname = "hank",email='junghe02@luther.edu',address='Dieseth 523',phoneNum='651-925-7403')
 u3 = User(userId='dykega01',firstName='gage',lastName='dykema',nickname = "gagey",email='dykega01@luther.edu',address='Larsen APT',phoneNum='651-249-7599')
-u4 = User(userId='gagehe01',firstName='henry',lastName='gage',email='gagehe01@luther.edu',address='LarsenAPT',phoneNum='651-249-7599')
+u4 = User(userId='gagehe01',firstName='henry',lastName='gage',email='gagehe01@luther.edu',address='Miller 218',phoneNum='651-249-7599')
 u5 = User(userId='bmiller', firstName='brad',lastName='miller',email='bmiller@luther.edu',address='Olin 321',phoneNum='563-387-1137')
 u6 = User(userId='bottth01',firstName='thomas',lastName='bottem',nickname = "tom",email='bottth01@luther.edu',address='Larsen APT',phoneNum='555-679-7891')
 
@@ -62,6 +73,12 @@ s8 = Skill(skillName='business',users=[u6])
 s9 = Skill(skillName='teaching',users=[u6,u5])
 
 db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9])
+
+p1 = Project(projectId="IntProgFinal-01", projectName="Internet Programming Final", projectDesc="A final project for Internet Programming class for spring semester 2014",projectDue="5-21-2014",contributers=[u1,u2,u3])
+p2 = Project(projectId="IntProg-01", projectName="Internet Programming Class", projectDesc="Attend Internet Programming Class",projectDue="5-18-2014",contributers=[u1,u2,u3,u5])
+p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",contributers=[u4,u5])
+
+db.session.add_all([p1,p2,p3])
 db.session.commit()
 
 class SkillForm(Form):
@@ -200,3 +217,45 @@ def userprofile(userid):
     else:
         user = []
     return render_template('profile.html', user=user)
+
+@app.route('/projects')
+def projects():
+    projs = Project.query.limit(5)
+    projects = []
+    for p in projs:
+        ip = []
+        ip.append(p.projectId)
+        ip.append(p.projectName)
+        ip.append(p.projectDesc)
+        ip.append(p.projectDue)
+        contrRaw = p.contributers
+        contr = []
+        for c in contrRaw:
+            cps = []
+            cps.append(c.userId)
+            cps.append(c.firstName)
+            cps.append(c.lastName)
+            contr.append(cps)
+        ip.append(contr)
+        projects.append(ip)
+    return render_template('project.html',projects=projects)
+
+@app.route('/projects/<projectid>')
+def projectProfile(projectid):
+    projRaw = Project.query.filter_by(projectId=projectid).first()
+    project = []
+    project.append(projRaw.projectId)
+    project.append(projRaw.projectName)
+    project.append(projRaw.projectDesc)
+    project.append(projRaw.projectDue)
+    contrRaw = projRaw.contributers
+    contr = []
+    for c in contrRaw:
+        cps = []
+        cps.append(c.userId)
+        cps.append(c.firstName)
+        cps.append(c.lastName)
+        contr.append(cps)
+    project.append(contr)
+    return render_template('projProfile.html',project=project)
+
