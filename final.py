@@ -82,12 +82,13 @@ s6 = Skill(skillName='css',users=[u3,u5])
 s7 = Skill(skillName='internet programming',users=[u2,u3,u5])
 s8 = Skill(skillName='business',users=[u6])
 s9 = Skill(skillName='teaching',users=[u6,u5])
+s10 = Skill(skillName='marketing',users=[u2,u3,u5])
 
-db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9])
+db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9,s10])
 
 p1 = Project(projectId="IntProgFinal-01", projectName="Internet Programming Final", projectDesc="A final project for Internet Programming class for spring semester 2014",projectDue="5-21-2014",contributers=[u1,u2,u3],skills=[s1,s2,s6,s7])
-p2 = Project(projectId="IntProg-01", projectName="Internet Programming Class", projectDesc="Attend Internet Programming Class",projectDue="5-18-2014",contributers=[u1,u2,u3,u5])
-p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",contributers=[u4,u5])
+p2 = Project(projectId="IntProg-01", projectName="Internet Programming Class", projectDesc="Attend Internet Programming Class",projectDue="5-18-2014",contributers=[u1,u2,u3,u5],skills=[s1,s2,s6,s7,s9])
+p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",contributers=[u4,u5],skills=[s8,s10])
 
 db.session.add_all([p1,p2,p3])
 db.session.commit()
@@ -164,7 +165,7 @@ def skillsearch():
             x.append(resProj.projectName.title())
             x.append(resProj.projectDesc)
             sks = []
-            for i in range(4):
+            for i in range(2):
                 sks.append(resProj.skills[i].skillName.title())
             x.append(sks)
             projResults.append(x)
