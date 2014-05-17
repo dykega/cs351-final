@@ -27,7 +27,7 @@ UserProject = db.Table('userprojects',
     db.Column('project_Id', db.Text, db.ForeignKey('project.projectId'))
 )
 
-SkillProject = db.Table('userprojects',
+SkillProject = db.Table('skillprojects',
     db.Column('skillName', db.Text, db.ForeignKey('skill.skillName')),
     db.Column('project_Id', db.Text, db.ForeignKey('project.projectId'))
 )
@@ -164,7 +164,7 @@ def skillsearch():
             x.append(resProj.projectName.title())
             x.append(resProj.projectDesc)
             sks = []
-            for i in range(2):
+            for i in range(4):
                 sks.append(resProj.skills[i].skillName.title())
             x.append(sks)
             projResults.append(x)
