@@ -1,0 +1,43 @@
+body {
+	background-color: #003D7F;
+}
+
+
+.jumbotron {
+	background-color: #BFDDFF;
+	font-family: Copperplate, Verdana;
+	color: #0079FF;
+}
+
+.panel-heading {
+	font-family: Copperplate, Verdana;
+	color: #0061CC;
+}
+
+.panel-body {
+	font-family: Copperplate, Verdana;
+	color: #0061CC;
+}
+
+.page-header {
+	background-color: #73797F;
+	font-family: Copperplate, Verdana;
+	color: #56659C;
+}
+
+.panel-title {
+	font-family: Copperplate, Verdana;
+	color: #0061CC;
+}
+
+.list-group {
+	background-color: #BFDDFF;
+	font-family: Copperplate, Verdana;
+	color: #0079FF;
+}
+
+.table-responsive {
+	background-color: #BFDDFF;
+	font-family: Copperplate, Verdana;
+	color: #0079FF;
+}
