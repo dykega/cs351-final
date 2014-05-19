@@ -20,9 +20,9 @@ body {
 }
 
 .page-header {
-	background-color: #73797F;
+	background-color: #BFDDFF;
 	font-family: Copperplate, Verdana;
-	color: #56659C;
+	color: #0079FF;
 }
 
 .panel-title {
@@ -40,4 +40,20 @@ body {
 	background-color: #BFDDFF;
 	font-family: Copperplate, Verdana;
 	color: #0079FF;
+}
+
+#email {
+	width: 70%;
+	margin: auto;
+	color: #0079FF;
+}
+
+.input-label {
+	font-family: Copperplate, Verdana;
+	color: white;
+}
+
+a {
+	font-family: Copperplate, Verdana;
+	color: #7F680D;
 }

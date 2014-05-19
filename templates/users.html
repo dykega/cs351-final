@@ -15,7 +15,7 @@
       </div>
     {% endif %}
       <form method="GET" action="/users">
-        <div>{{ form.name.label }}: {{ form.name }}</div>
+        <div><span class="input-label">{{ form.name.label }}:</span> {{ form.name }}</div>
         <input type="submit" value="Submit">
       </form>
     {% else %}

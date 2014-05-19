@@ -8,16 +8,20 @@
   {% for proj in projects%}
   <div class="panel panel-info col-md-12">
     <div class="panel-heading">
+      <div class="links">
       <a href="projects/{{proj[0]}}"><h3 class="panel-title">{{proj[1]}}</h3></a>
+      </div>
     </div>
     <div class="panel-body">
       <ul>
         <li>Project ID: {{proj[0]}}</li>
         <li>Due Date: {{proj[3]}}</li>
         <li>Contributers:
+        <div class="links">
         {% for cont in proj[4] %}
           <a href="users/{{cont[0]}}"> {{cont[1].title()}} {{cont[2].title()}}</a> |
         {% endfor %}
+        </div>
         </li>
         <li>Description: {{proj[2][0:25]}}...</li>
       </ul>
