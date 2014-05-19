@@ -56,8 +56,8 @@ class Project(db.Model):
     projectName = db.Column(db.Text)
     projectDesc = db.Column(db.Text)
     projectDue = db.Column(db.Text)
-    projectStart = db.Column(db.Text)
-    projectEnd = db.Column(db.Text)
+    projectStart = db.Column(db.Date)
+    projectEnd = db.Column(db.Date)
     contributers = db.relationship('User', secondary = UserProject)
     skills = db.relationship('Skill', secondary= SkillProject)
 
@@ -86,9 +86,9 @@ s10 = Skill(skillName='marketing',users=[u2,u3,u5])
 
 db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9,s10])
 
-p1 = Project(projectId="IntProgFinal-01", projectName="Internet Programming Final", projectDesc="A final project for Internet Programming class for spring semester 2014",projectDue="5-21-2014",contributers=[u1,u2,u3],skills=[s1,s2,s6,s7])
-p2 = Project(projectId="IntProg-01", projectName="Internet Programming Class", projectDesc="Attend Internet Programming Class",projectDue="5-18-2014",contributers=[u1,u2,u3,u5],skills=[s1,s2,s6,s7,s9])
-p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",contributers=[u4,u5],skills=[s8,s10])
+p1 = Project(projectId="IntProgFinal-01", projectName="Internet Programming Final", projectDesc="A final project for Internet Programming class for spring semester 2014",projectDue="5-21-2014",projectStart=datetime.date(2014,5,1),projectEnd=datetime.date(2014,5,20),contributers=[u1,u2,u3],skills=[s1,s2,s6,s7])
+p2 = Project(projectId="IntProg-01", projectName="Internet Programming Class", projectDesc="Attend Internet Programming Class",projectDue="5-18-2014",projectStart = datetime.date(2014,2,5),projectEnd=datetime.date(2014,5,22),contributers=[u1,u2,u3,u5],skills=[s1,s2,s6,s7,s9])
+p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",projectStart = datetime.date(2014,5,15), projectEnd=datetime.date(2014,6,10),contributers=[u4,u5],skills=[s8,s10])
 
 db.session.add_all([p1,p2,p3])
 db.session.commit()
@@ -287,7 +287,6 @@ def projects():
 def projectProfile(projectid):
     projRaw = Project.query.filter_by(projectId=projectid).first()
     project = []
-    print projRaw
     project.append(projRaw.projectId)
     project.append(projRaw.projectName)
     project.append(projRaw.projectDesc)
@@ -307,5 +306,6 @@ def projectProfile(projectid):
     for s in sklRaw:
         sklls.append(s.skillName)
     project.append(sklls)
-    return render_template('projProfile.html',project=project)
+    complete = int(100*(((datetime.date.today() - projRaw.projectStart).days * 1.0) / (projRaw.projectEnd - projRaw.projectStart).days))
+    return render_template('projProfile.html',project=project,complete=complete)
 
