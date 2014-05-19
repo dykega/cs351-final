@@ -57,3 +57,14 @@ a {
 	font-family: Copperplate, Verdana;
 	color: #7F680D;
 }
+
+.progress-bar {
+	background-color: #7F680D;
+}
+.progress{
+	background-color: #84929C;
+	margin-top: 15px;
+}
+.full{
+	height:100%;
+}

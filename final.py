@@ -83,12 +83,13 @@ s7 = Skill(skillName='internet programming',users=[u2,u3,u5])
 s8 = Skill(skillName='business',users=[u6])
 s9 = Skill(skillName='teaching',users=[u6,u5])
 s10 = Skill(skillName='marketing',users=[u2,u3,u5])
+s11 = Skill(skillName='pricing')
 
-db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9,s10])
+db.session.add_all([s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11])
 
 p1 = Project(projectId="IntProgFinal-01", projectName="Internet Programming Final", projectDesc="A final project for Internet Programming class for spring semester 2014",projectDue="5-21-2014",projectStart=datetime.date(2014,5,1),projectEnd=datetime.date(2014,5,20),contributers=[u1,u2,u3],skills=[s1,s2,s6,s7])
 p2 = Project(projectId="IntProg-01", projectName="Internet Programming Class", projectDesc="Attend Internet Programming Class",projectDue="5-18-2014",projectStart = datetime.date(2014,2,5),projectEnd=datetime.date(2014,5,22),contributers=[u1,u2,u3,u5],skills=[s1,s2,s6,s7,s9])
-p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",projectStart = datetime.date(2014,5,15), projectEnd=datetime.date(2014,6,10),contributers=[u4,u5],skills=[s8,s10])
+p3 = Project(projectId="Startup-01", projectName="New Startup", projectDesc="Create a new startup company to work for after graduation",projectDue="5-30-2015",projectStart = datetime.date(2014,5,15), projectEnd=datetime.date(2014,6,10),contributers=[u4,u5],skills=[s8,s10,s11])
 
 db.session.add_all([p1,p2,p3])
 db.session.commit()
@@ -172,7 +173,8 @@ def skillsearch():
 
         return render_template('skill.html', results = results, form = form, qr = qr, projResults=projResults)
     else:
-        return render_template('skill.html', form = form)
+        qr = False
+        return render_template('skill.html', form = form,qr=qr)
 
 @app.route('/users')
 def usersearch():
