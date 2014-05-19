@@ -41,7 +41,11 @@
       <h3 class="panel-title">Project Description</h3>
     </div>
     <div class="panel-body">
-      {{project[2]}}    
+      {{project[2]}} <br>
+      Skills Used: 
+      {% for s in project[5] %}
+      {{s.title()}} |
+      {% endfor %}    
     </div>
   </div>
 

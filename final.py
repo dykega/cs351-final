@@ -302,5 +302,10 @@ def projectProfile(projectid):
         cps.append(c.email)
         contr.append(cps)
     project.append(contr)
+    sklRaw = projRaw.skills
+    sklls = []
+    for s in sklRaw:
+        sklls.append(s.skillName)
+    project.append(sklls)
     return render_template('projProfile.html',project=project)
 
