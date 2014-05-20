@@ -11,11 +11,22 @@
       <div class="alert alert-info">
         <strong>You have been added!</strong> Now it's time to start looking for your future collaborators!
         </div>
-      </div>
+    </div>
+
 
       <a class="col-md-12" href="/projects"><button type="button" class="btn btn-xs btn-primary">Look at the Current Projects!</button></a>
 
 {% else %}
+
+<div class="panel panel-info col-md-4" class="fulldiv">
+        <div class="panel-heading">
+          <h3 class="panel-title">Add Yourself to Our Database!</h3>
+        </div>
+        <div class="panel-body">
+          Add your information in the form below to add yourself! Find awesome collaborators, fun projects, or even a tutor! Add the information asked of you in the boxes below; fields marked with an asterisk are required. If you have multiple responses to any of the fields, separate them with commas and no spaces (ex: html,css,python).
+        </div>
+  </div>
+
   <form method="GET" action="/newuser">
         <div><span class="input-label">{{ form.firstname.label }}:</span> {{ form.firstname }}</div>
         <div><span class="input-label">{{ form.lastname.label }}:</span> {{ form.lastname }}</div>
@@ -24,9 +35,9 @@
         <div><span class="input-label">{{ form.address.label }}:</span> {{ form.address }}</div>
 		<div><span class="input-label">{{ form.phoneNum.label }}:</span> {{ form.phoneNum }}</div>
 		<div><span class="input-label">{{ form.skills.label }}:</span> {{ form.skills }}</div>
-
-        <input type="submit" value="Submit">
-      </form>
+		<input type="submit" value="Submit">
+  </form>
+</div>
 
 {% endif %}
 {% endblock %}
