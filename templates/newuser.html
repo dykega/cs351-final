@@ -1,4 +1,32 @@
 {% extends main.html %}
 {% block stuff %}
+<div class="container theme-showcase" role="main">
+  <div class="page-header">
+    <h1><br />Add a New User</h1>
+  </div>
 
+{% if not form %} 
+	<div class="page-header">
+      <h3>Congratulations!</h3>
+      <div class="alert alert-info">
+        <strong>You have been added!</strong> Now it's time to start looking for your future collaborators!
+        </div>
+      </div>
+
+      <a class="col-md-12" href="/projects"><button type="button" class="btn btn-xs btn-primary">Look at the Current Projects!</button></a>
+
+{% else %}
+  <form method="GET" action="/newuser">
+        <div><span class="input-label">{{ form.firstname.label }}:</span> {{ form.firstname }}</div>
+        <div><span class="input-label">{{ form.lastname.label }}:</span> {{ form.lastname }}</div>
+        <div><span class="input-label">{{ form.nickname.label }}:</span> {{ form.nickname }}</div>
+        <div><span class="input-label">{{ form.email.label }}:</span> {{ form.email }}</div>
+        <div><span class="input-label">{{ form.address.label }}:</span> {{ form.address }}</div>
+		<div><span class="input-label">{{ form.phoneNum.label }}:</span> {{ form.phoneNum }}</div>
+		<div><span class="input-label">{{ form.skills.label }}:</span> {{ form.skills }}</div>
+
+        <input type="submit" value="Submit">
+      </form>
+
+{% endif %}
 {% endblock %}
