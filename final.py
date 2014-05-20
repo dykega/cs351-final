@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from wtforms import *
 from flask_bootstrap import Bootstrap
@@ -310,4 +310,83 @@ def projectProfile(projectid):
     project.append(sklls)
     complete = int(100*(((datetime.date.today() - projRaw.projectStart).days * 1.0) / (projRaw.projectEnd - projRaw.projectStart).days))
     return render_template('projProfile.html',project=project,complete=complete)
+
+@app.route('/api')
+def api():
+    if request.args.get("user") != None:
+        if request.args.get("type") != None:
+            if request.args.get("type").lower() == "first":
+                inName = request.args.get('user').lower()
+                usRaw = User.query.filter_by(firstName=inName).all()
+                res = []
+                for us in usRaw:
+                    u = []
+                    u.append(us.firstName)
+                    u.append(us.lastName)
+                    u.append(us.nickname)
+                    sksRaw = us.skills
+                    sks = []
+                    for s in sksRaw:
+                        sks.append(s.skillName)
+                    u.append(sks)
+                    res.append(u)
+                return jsonify(results=res)
+
+            elif request.args.get("type").lower() == "last":
+                inName = request.args.get('user').lower()
+                usRaw = User.query.filter_by(lastName=inName).all()
+                res = []
+                for us in usRaw:
+                    u = []
+                    u.append(us.firstName)
+                    u.append(us.lastName)
+                    u.append(us.nickname)
+                    sksRaw = us.skills
+                    sks = []
+                    for s in sksRaw:
+                        sks.append(s.skillName)
+                    u.append(sks)
+                    res.append(u)
+                return jsonify(results=res)
+
+            elif request.args.get("type").lower() == "nickname":
+                inName = request.args.get('user').lower()
+                usRaw = User.query.filter_by(nickname=inName).all()
+                res = []
+                for us in usRaw:
+                    u = []
+                    u.append(us.firstName)
+                    u.append(us.lastName)
+                    u.append(us.nickname)
+                    sksRaw = us.skills
+                    sks = []
+                    for s in sksRaw:
+                        sks.append(s.skillName)
+                    u.append(sks)
+                    res.append(u)
+                return jsonify(results=res)
+
+            else: 
+                return jsonify(results="ERROR:Incorrect Type specified")
+        else:
+            inName = request.args.get('user').lower()
+            usRaw1 = User.query.filter_by(firstName=inName).all()
+            usRaw2 = User.query.filter_by(lastName=inName).all()
+            usRaw3 = User.query.filter_by(nickname=inName).all()
+            usRaw = usRaw1 + usRaw2 + usRaw3
+            res = []
+            for us in usRaw:
+                u = []
+                u.append(us.firstName)
+                u.append(us.lastName)
+                u.append(us.nickname)
+                sksRaw = us.skills
+                sks = []
+                for s in sksRaw:
+                    sks.append(s.skillName)
+                u.append(sks)
+                res.append(u)
+            return jsonify(results=res)
+    else:
+        return jsonify(results="ERROR: Specify User")   
 
