@@ -101,13 +101,13 @@ class UserForm(Form):
     name = TextField('Name of User')
 
 class addUserForm(Form):
-    firstname = TextField("First Name")
-    lastname = TextField("First Name")
+    firstname = TextField("First Name",[validators.Required()])
+    lastname = TextField("First Name",[validators.Required()])
     nickname = TextField("First Name")
-    email = TextField("First Name")
+    email = TextField("First Name",[validators.Required()])
     address = TextField("First Name")
     phoneNum = TextField("Phone Number")
-    skills = TextField("First Name")
+    skills = TextField("First Name",[validators.Required()])
 
 
 @app.route('/') 
@@ -401,3 +401,4 @@ def api():
 
 @app.route('/useradd')
 def add():
+    
