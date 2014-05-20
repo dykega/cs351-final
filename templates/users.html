@@ -18,6 +18,8 @@
         <div><span class="input-label">{{ form.name.label }}:</span> {{ form.name }}</div>
         <input type="submit" value="Submit">
       </form>
+      <br>
+        <a class="col-md-6" href="/newuser"><button type="button" class="btn btn-xs btn-primary">Add User</button></a>
     {% else %}
       <div class="col-md-8">
       <div class="table-responsive">
@@ -45,7 +47,8 @@
         </table>
       </div>  
     </div>
-      <a class="col-md-12" href="/users"><button type="button" class="btn btn-xs btn-primary">Search again?</button></a>
+      <a class="col-md-6" href="/users"><button type="button" class="btn btn-xs btn-primary">Search again?</button></a>
+      <a class="col-md-6" href="/newuser"><button type="button" class="btn btn-xs btn-primary">Add User</button></a>
     {% endif %}
 </div>
 {% endblock %}

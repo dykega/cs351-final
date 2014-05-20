@@ -100,15 +100,6 @@ class SkillForm(Form):
 class UserForm(Form):
     name = TextField('Name of User')
 
-class addUserForm(Form):
-    firstname = TextField("First Name",[validators.Required()])
-    lastname = TextField("First Name",[validators.Required()])
-    nickname = TextField("First Name")
-    email = TextField("First Name",[validators.Required()])
-    address = TextField("First Name")
-    phoneNum = TextField("Phone Number")
-    skills = TextField("First Name",[validators.Required()])
-
 
 @app.route('/') 
 def home():
@@ -264,7 +255,6 @@ def userprofile(userid):
             pInfo.append(p.projectName.title())
             pjs.append(pInfo)
         user.append(pjs)
-        print user
         #user list: 0-userid, 1-firstname, 2-lastname, 3-nickname, 4-email, 5-address, 6-phoneNum, 7-skills, 8-projects
         #skill list: 0-skillName
         #project list: 0-projectId, 1-project name
@@ -399,6 +389,50 @@ def api():
     else:
         return jsonify(results="ERROR: Specify User")   
 
-@app.route('/useradd')
+@app.route('/newuser')
 def add():
-    
+    if request.args.get("firstname") != None:
+        fn = request.args.get('firstname').lower()
+        ln = request.args.get('lastname').lower()
+        if request.args.get('nickname') != None:
+            nn = request.args.get('nickname').lower()
+        else:
+            nn = ""
+        em = request.args.get('email').lower()
+        if request.args.get('address') != None:
+            ad = request.args.get('address').lower()
+        else:
+            ad = ""
+        if request.args.get('phoneNum') != None:
+            pn = request.args.get('phoneNum').lower()
+        else:
+            pn = ""
+
+        uIdStart = ln[0:4] + fn[0:2]
+        done = False
+        num = 1
+        while not done:
+            newId = uIdStart + str(num//10) + str(num%10)
+            if User.query.filter_by(userId = str(newId)).all() == []:
+                done = True
+            else:
+                num += 1
+
+        sRaw = request.args.get('skills').split(',')
+        sks = []
+        for sR in sRaw:
+            s = sR.lower()
+            if Skill.query.filter_by(skillName=s).all() == []:
+                s1 = Skill(skillName=str(s))
+                db.session.add(s1)
+                sks.append(s1)
+            else:
+                sks.append(Skill.query.filter_by(skillName=s).first())
+
+        db.session.flush()
+        u1 = User(userId=str(newId),firstName=str(fn),lastName=str(ln),nickname = str(nn),email=str(em),address=str(ad),phoneNum=str(pn),skills=sks)
+        db.session.add(u1)
+        db.session.commit()
+        return render_template('newuser.html')
+    else:
+        return render_template('newuser.html',form = True)
